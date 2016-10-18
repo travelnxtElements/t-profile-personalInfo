@@ -1,0 +1,143 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-passenger-info/t-passenger-segment.html"/>
+<link rel="import" href="../iron-collapse/iron-collapse.html" />
+<link rel="import" href="../t-section-header/t-section-header.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../t-dropdown/t-dropdown.html">
+
+<!--
+    <h3>Details:</h3>
+        The `t-profile-personal-info` is a form component for getting the user details like name suffix title etc.
+        It uses three components primarily, one being `t-passenger-segment` which is used to get user's details.
+        The second being `t-input` which is used to get the redress number, and the last 
+        being `t-button` which is used to record/save all the above informations. 
+       
+        Following are its child components -
+         <ul>
+          <ol> 1.`t-passenger-segment`</ol>
+          <ol> 2.`t-input`</ol>
+          <ol> 3.`iron-collapse`</ol>  
+          <ol> 4.`t-button`</ol> 
+         </ul>
+
+         The hide gender property hides the gender selections on `t-passenger-segment`.
+
+    <h3>Events:</h3>
+        Following events are fired by this component.
+           <p>'_personalInfo' - fired when user clicks on save button.</p>
+           <p>'_toggleRedress' - fired to toggle collapse behaviour</p>
+
+    <h3>Example:</h3>
+
+        <t-profile-personal-info>
+
+        </t-profile-personal-info>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-profile-personal-info">
+
+        <style include="travel-element-styles">
+            :host {
+                font-family: var(--primary-font-family, 'Open sans');
+            }
+            t-button {
+                display: block;
+            }                
+        </style>
+        <template>
+            <!-- content tag to insert header component-->
+            <content select=".t-header"></content>
+            <t-passenger-segment 
+              id='paxSegment'
+              hide-gender
+              title="{{personalInfo.title}}"
+              first-name= "{{personalInfo.firstName}}"
+              middle-name= "{{personalInfo.middleName}}"
+              last-name= "{{personalInfo.lastName}}"
+              suffix="{{personalInfo.suffix}}"
+              date-of-birth="{{personalInfo.dateOfBirth}}"
+              type="{{personalInfo.type}}">
+            </t-passenger-segment>
+
+            <div class="section-small">
+                <p class="link-style font-12"  on-tap="_toggleRedress">Redress #
+                    <iron-icon id="icon" icon="[[toggleIcon.closed]]"></iron-icon>
+                </p>
+                <iron-collapse id="collapse">
+                    <t-input 
+                        id="redressNumber" 
+                        label="Redress Number" 
+                        class="margin-bottom-large" 
+                        value="{{personalInfo.redressNumber}}">                        
+                    </t-input>
+                </iron-collapse>
+            </div>
+
+            <t-button 
+              class="primary row" 
+              label="Save"
+              on-tap="_personalInfo">
+            </t-button>
+        </template>
+
+  <script>
+   (function () {
+        'use strict'
+        Polymer({
+
+            is: 't-profile-personal-info',
+         
+            properties: {
+                /**
+                * The personalInfo Object to return all the personalInfo related information inputted by the user.
+                * @type {Object}
+                */
+                personalInfo: {
+                    type: Object,
+                    value: function () {
+                        return {
+                           type:'Adult',
+                           firstName:'',
+                           lastName:'',
+                           middleName:'',
+                           title:'',
+                           suffix:"",
+                           dateOfBirth:'',
+                           redressNumber:''
+                        };
+                    }
+                },
+                /**
+                * The property to display correct icons on toggle
+                * @type {String}
+                */
+                toggleIcon:{
+                    type:Object,
+                    value: function () {
+                        return {
+                                opened: 'icons:arrow-drop-up',
+                                closed: 'icons:arrow-drop-down'
+                            };
+                        }
+                    }
+            },
+
+            _personalInfo: function() {
+                if(this.$.paxSegment.validate()){
+                   this.fire('personal-info-save',this.personalInfo);
+                }
+            },
+
+             _toggleRedress:function(){               
+               this.$.collapse.toggle();
+               this.$.icon.icon = this.$.icon.icon === this.toggleIcon.closed 
+                                ? this.toggleIcon.opened 
+                                : this.toggleIcon.closed;
+            }
+        });
+  })();
+  </script>
+</dom-module>
