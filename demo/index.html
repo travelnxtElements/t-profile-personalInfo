@@ -29,7 +29,14 @@
      <template is="dom-bind" id="templatizer">
               <t-profile-personal-info 
                 id="profilePersInfo"
-                personal-info="{{personalInfo}}"
+                first-name="{{firstName}}"
+                last-name="{{lastName}}"
+                middle-name="{{middleName}}"
+                title="{{title}}"
+                suffix="{{suffix}}"
+                date-of-birth="{{dateOfBirth}}"
+                type="{{type}}"
+                redress-number="{{redressNumber}}"
                 on-personal-info-save="personalInfoSaved">
                  <t-header
                     icon="arrow-back"
@@ -46,20 +53,14 @@
                     'use strict'
                     window.addEventListener('WebComponentsReady', function(e) {
                         var templatizer = document.getElementById('templatizer');
-                        templatizer.personalInfo = {
-                               index: 1,
-                               type:'Adult',
-                               firstName:'Manoj',
-                               lastName:'Chalode',
-                               middleName:'Madhavrao',
-                               title:'Mr',
-                               suffix:"Jr.",
-                               dateOfBirth:'09/12/1990',
-                               redressNumber:'SGX-123'
-                            };
-                        templatizer.personalInfoSaved = function (e) {
-                            console.log(e.detail)
-                        };
+                        templatizer.index=1;
+                        templatizer.firstName="Ashim";
+                        templatizer.lastName="Bhattacharya";
+                        templatizer.middleName="Kumar";
+                        templatizer.title="Mr";
+                        templatizer.suffix="Jr.";
+                        templatizer.dateOfBirth="05/05/1989";
+                        templatizer.redressNumber="SGX-123";
                     });
                 })();
             </script>

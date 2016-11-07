@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../t-button/t-button.html">
 <link rel="import" href="../t-passenger-info/t-passenger-segment.html"/>
 <link rel="import" href="../iron-collapse/iron-collapse.html" />
 <link rel="import" href="../t-section-header/t-section-header.html" />
@@ -9,24 +8,22 @@
 <!--
     <h3>Details:</h3>
         The `t-profile-personal-info` is a form component for getting the user details like name suffix title etc.
-        It uses three components primarily, one being `t-passenger-segment` which is used to get user's details.
-        The second being `t-input` which is used to get the redress number, and the last 
-        being `t-button` which is used to record/save all the above informations. 
+        It uses two components primarily, one being `t-passenger-segment` which is used to get user's details.
+        The second being `t-input` which is used to get the redress number.
        
         Following are its child components -
          <ul>
           <ol> 1.`t-passenger-segment`</ol>
           <ol> 2.`t-input`</ol>
           <ol> 3.`iron-collapse`</ol>  
-          <ol> 4.`t-button`</ol> 
          </ul>
 
          The hide gender property hides the gender selections on `t-passenger-segment`.
 
     <h3>Events:</h3>
         Following events are fired by this component.
-           <p>'_personalInfo' - fired when user clicks on save button.</p>
-           <p>'_toggleRedress' - fired to toggle collapse behaviour</p>
+           <p>'_validate' - trigger to validate the form</p>
+           <p>'toggleRedress' - fired to toggle collapse behaviour</p>
 
     <h3>Example:</h3>
 
@@ -48,18 +45,17 @@
             }                
         </style>
         <template>
-            <!-- content tag to insert header component-->
-            <content select=".t-header"></content>
+      
             <t-passenger-segment 
               id='paxSegment'
-              hide-gender
-              title="{{personalInfo.title}}"
-              first-name= "{{personalInfo.firstName}}"
-              middle-name= "{{personalInfo.middleName}}"
-              last-name= "{{personalInfo.lastName}}"
-              suffix="{{personalInfo.suffix}}"
-              date-of-birth="{{personalInfo.dateOfBirth}}"
-              type="{{personalInfo.type}}">
+              hide-gender="{{hideGender}}"
+              title="{{title}}"
+              first-name= "{{firstName}}"
+              middle-name= "{{middleName}}"
+              last-name= "{{lastName}}"
+              suffix="{{suffix}}"
+              date-of-birth="{{dateOfBirth}}"
+              type="{{type}}">
             </t-passenger-segment>
 
             <div class="section-small">
@@ -71,16 +67,12 @@
                         id="redressNumber" 
                         label="Redress Number" 
                         class="margin-bottom-large" 
-                        value="{{personalInfo.redressNumber}}">                        
+                        value="{{redressNumber}}">                        
                     </t-input>
                 </iron-collapse>
             </div>
 
-            <t-button 
-              class="primary row" 
-              label="Save"
-              on-tap="_personalInfo">
-            </t-button>
+        
         </template>
 
   <script>
@@ -92,28 +84,84 @@
          
             properties: {
                 /**
-                * The personalInfo Object to return all the personalInfo related information inputted by the user.
-                * @type {Object}
-                */
-                personalInfo: {
-                    type: Object,
-                    value: function () {
-                        return {
-                           type:'Adult',
-                           firstName:'',
-                           lastName:'',
-                           middleName:'',
-                           title:'',
-                           suffix:"",
-                           dateOfBirth:'',
-                           redressNumber:''
-                        };
-                    }
+                 * Set or get the firstName of the user 
+                 * @type {String}
+                 */
+                firstName: {
+                    type: String,
+                    notify: true
                 },
                 /**
-                * The property to display correct icons on toggle
-                * @type {String}
-                */
+                 * Set or get the middleName of the user 
+                 * @type {String}
+                 */
+                middleName: {
+                    type: String,
+                    notify: true
+                },
+                /**
+                 * Set or get the lastName of the user 
+                 * @type {String}
+                 */
+                lastName: {
+                    type: String,
+                    notify: true
+                },
+                /**
+                 * Pass true to hide Gender
+                 * @type {Boolean}
+                 */
+                hideGender: {
+                    type: Boolean,
+                    value: true
+                },
+
+                /**
+                 * Set or get the title of the user 
+                 * @type {String}
+                 */
+                title: {
+                    type: String,
+                    notify: true
+                },
+                /**
+                 * Set or get the suffix of the user.
+                 * @type {String}
+                 */
+                suffix: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the dateOfBirth of the user.
+                 * @type {String}
+                 */
+                dateOfBirth: {
+                    type: String,
+                    notify: true
+                },
+                /**
+                 * Set or get the type of the user.
+                 * @type {String}
+                 */
+                type: {
+                    type: String,
+                    notify: true,
+                    value:'Adult'
+                },
+                /**
+                 * Set or get the Redress Number (if any) provided by the user.
+                 * @type {String}
+                 */
+                redressNumber:{
+                    type: String,
+                    notify: true
+                },
+                /**
+                 * The property to display correct icons on toggle
+                 * @type {Object}
+                 */
                 toggleIcon:{
                     type:Object,
                     value: function () {
@@ -125,13 +173,10 @@
                     }
             },
 
-            _personalInfo: function() {
-                if(this.$.paxSegment.validate()){
-                   this.fire('personal-info-save',this.personalInfo);
-                }
+            _validate: function() {
+                this.$.paxSegment.validate()
             },
-
-             _toggleRedress:function(){               
+            toggleRedress:function(){               
                this.$.collapse.toggle();
                this.$.icon.icon = this.$.icon.icon === this.toggleIcon.closed 
                                 ? this.toggleIcon.opened 
