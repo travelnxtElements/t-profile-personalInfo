@@ -22,7 +22,7 @@
 
     <h3>Events:</h3>
         Following events are fired by this component.
-           <p>'_validate' - trigger to validate the form</p>
+           <p>'validate' - trigger to validate the form</p>
            <p>'toggleRedress' - fired to toggle collapse behaviour</p>
 
     <h3>Example:</h3>
@@ -36,16 +36,14 @@
 
 <dom-module id="t-profile-personal-info">
 
-        <style include="travel-element-styles">
-            :host {
-                font-family: var(--primary-font-family, 'Open sans');
-            }
-            t-button {
-                display: block;
-            }                
-        </style>
-        <template>
       
+        <template>
+            <style include="travel-element-styles">
+                :host {
+                    font-family: var(--primary-font-family, 'Open sans');
+                }
+                             
+            </style>
             <t-passenger-segment 
               id='paxSegment'
               hide-gender="{{hideGender}}"
@@ -173,8 +171,8 @@
                     }
             },
 
-            _validate: function() {
-                this.$.paxSegment.validate()
+            validate: function() {
+              return this.$.paxSegment.validate();
             },
             toggleRedress:function(){               
                this.$.collapse.toggle();
