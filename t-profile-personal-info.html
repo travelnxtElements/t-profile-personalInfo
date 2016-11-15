@@ -42,7 +42,14 @@
                 :host {
                     font-family: var(--primary-font-family, 'Open sans');
                 }
-                             
+                #icon{
+                    position: relative;
+                    margin: -2px 0 0 -5px;
+                }    
+                .section-small{
+                    padding-top: 0;
+                    margin-top: -10px;
+                }    
             </style>
             <t-passenger-segment 
               id='paxSegment'
@@ -57,7 +64,7 @@
             </t-passenger-segment>
 
             <div class="section-small">
-                <p class="link-style font-12"  on-tap="toggleRedress">Redress #
+                <p class="link-style font-12 margin-bottom"  on-tap="toggleRedress">Redress #
                     <iron-icon id="icon" icon="[[toggleIcon.closed]]"></iron-icon>
                 </p>
                 <iron-collapse id="collapse">

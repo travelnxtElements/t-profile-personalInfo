@@ -1,5 +1,11 @@
 {
   "name": "t-profile-personalInfo",
+  "version": "0.0.0",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Sounak Pal <talk2sounak@gmail.com>",
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
   "description": "The component describes how a user can save his/her personalInfo",
   "main": "t-profile-personalInfo.html",
   "dependencies": {
