@@ -73,7 +73,7 @@
                         id="redressNumber" 
                         label="Redress Number" 
                         class="margin-bottom-large" 
-                        value="{{redressNumber}}">
+                        value="{{redressInfo.redressNumber}}">
                         <!-- Picking up first value as we always accept 1 redress number per user info-->
                     </t-input>
                 </iron-collapse>
@@ -146,7 +146,12 @@
                  */
                 dateOfBirth: {
                     type: Object,
-                    notify: true
+                    notify: true,
+                    value: {
+                      date: '',
+                      time: '',
+                      systemDateTime: ''
+                    }
                 },
                 /**
                  * Set or get the type of the user.
@@ -162,16 +167,12 @@
                  * @type {Array}
                  */
                 redressInfo:{
-                    type: Array,
-                    notify: true
-                },
-                /**
-                 * Set or get the Redress Number (if any) provided by the user.
-                 * @type {String}
-                 */
-                redressNumber:{
-                    type: String,
-                    notify: true
+                    type: Object,
+                    notify: true,
+                    value: {
+                        redressNumber : '',
+                        country: ''
+                    }
                 },
                 /**
                  * The property to display correct icons on toggle
@@ -189,9 +190,7 @@
             },
 
             observers: [
-                '__updateDate(dateOfBirth.date)',
-                '__updateRedressInfo(redressNumber)',
-                '__updateRedressNumber(redressInfo)'
+                '__updateDate(dateOfBirth.date)'
             ],
 
             validate: function() {
@@ -211,23 +210,6 @@
                 var tzoffset = date.getTimezoneOffset() * 60000;
                 this.dateOfBirth.systemDateTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0,-5);
                 this.dateOfBirth.time = date.toLocaleTimeString();
-            },
-            __updateRedressInfo: function(redressNumber){
-                if (!redressNumber) {
-                    return;
-                }
-
-                this.redressInfo = [{
-                    redressNumber: redressNumber,
-                    country: ''
-                }];
-            },
-            __updateRedressNumber: function(redressInfo){
-                if (!redressInfo ||!redressInfo.length) {
-                    return;
-                }
-
-                this.redressNumber = redressInfo[0].redressNumber;
             }
         });
   })();
