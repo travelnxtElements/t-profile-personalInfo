@@ -60,7 +60,7 @@
               middle-name= "{{middleName}}"
               last-name= "{{lastName}}"
               suffix="{{suffix}}"
-              date-of-birth="{{dateOfBirth}}"
+              date-of-birth="{{dateOfBirth.date}}"
               type="{{type}}">
             </t-passenger-segment>
 
@@ -144,7 +144,7 @@
                  * @type {String}
                  */
                 dateOfBirth: {
-                    type: String,
+                    type: Object,
                     notify: true
                 },
                 /**
@@ -179,6 +179,10 @@
                     }
             },
 
+            observers: [
+                '__updateDate(dateOfBirth.date)'
+            ],
+
             validate: function() {
               return this.$.paxSegment.validate();
             },
@@ -187,6 +191,15 @@
                this.$.icon.icon = this.$.icon.icon === this.toggleIcon.closed 
                                 ? this.toggleIcon.opened 
                                 : this.toggleIcon.closed;
+            },
+            __updateDate: function (dateString) {
+                if (!dateString) {
+                    return;
+                }
+                var date = new Date(dateString);
+                var tzoffset = date.getTimezoneOffset() * 60000;
+                this.dateOfBirth.systemDateTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0,-5);
+                this.dateOfBirth.time = date.toLocaleTimeString();
             }
         });
   })();
