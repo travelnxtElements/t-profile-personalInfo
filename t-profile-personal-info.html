@@ -73,7 +73,8 @@
                         id="redressNumber" 
                         label="Redress Number" 
                         class="margin-bottom-large" 
-                        value="{{redressNumber}}">                        
+                        value="{{redressNumber}}">
+                        <!-- Picking up first value as we always accept 1 redress number per user info-->
                     </t-input>
                 </iron-collapse>
             </div>
@@ -157,6 +158,14 @@
                     value:'Adult'
                 },
                 /**
+                 * object corresponding to redressInfo object in user basic info (API)
+                 * @type {Array}
+                 */
+                redressInfo:{
+                    type: Array,
+                    notify: true
+                },
+                /**
                  * Set or get the Redress Number (if any) provided by the user.
                  * @type {String}
                  */
@@ -180,7 +189,9 @@
             },
 
             observers: [
-                '__updateDate(dateOfBirth.date)'
+                '__updateDate(dateOfBirth.date)',
+                '__updateRedressInfo(redressNumber)',
+                '__updateRedressNumber(redressInfo)'
             ],
 
             validate: function() {
@@ -200,6 +211,23 @@
                 var tzoffset = date.getTimezoneOffset() * 60000;
                 this.dateOfBirth.systemDateTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0,-5);
                 this.dateOfBirth.time = date.toLocaleTimeString();
+            },
+            __updateRedressInfo: function(redressNumber){
+                if (!redressNumber) {
+                    return;
+                }
+
+                this.redressInfo = [{
+                    redressNumber: redressNumber,
+                    country: ''
+                }];
+            },
+            __updateRedressNumber: function(redressInfo){
+                if (!redressInfo ||!redressInfo.length) {
+                    return;
+                }
+
+                this.redressNumber = redressInfo[0].redressNumber;
             }
         });
   })();
